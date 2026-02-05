@@ -345,6 +345,27 @@ resource "aws_sqs_queue_policy" "eventbridge_to_sqs_policy" {
   })
 }
 
+# Permission for Lambda "puxar" and "apagar" messages from the FIFO queue
+resource "aws_iam_role_policy" "lambda_sqs_processor_policy" {
+  name = "lambda_sqs_processor_policy"
+  role = aws_iam_role.order_proc_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "sqs:ReceiveMessage",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueAttributes"
+        ]
+        Effect   = "Allow"
+        Resource = aws_sqs_queue.orders_queue.arn
+      },
+    ]
+  })
+}
+
 # 5. Order Processing Lambda (Consumes from SQS and saves to DynamoDB)
 resource "aws_iam_role" "order_proc_role" {
   name = "lambda-order-processing-role-affonso"
