@@ -1,3 +1,15 @@
+// creating the bucket for state persistence
+// aws s3api create-bucket --bucket terraform-state-affonso-unique-id --region us-east-1
+// aws s3api put-bucket-versioning --bucket terraform-state-affonso-unique-id --versioning-configuration Status=Enabled
+
+terraform {
+  backend "s3" {
+    bucket = "terraform-state-affonso-unique-id"
+    key    = "aws-event-driven/terraform.tfstate"
+    region = "us-east-1"
+  }
+}
+
 provider "aws" {
   region = "us-east-1"
 }
