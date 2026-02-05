@@ -39,8 +39,14 @@ pipeline {
     }
 
     post {
-        always {
-            cleanWs()
+//        always {
+//            cleanWs()
+//        }
+        failure {
+            echo 'Oops! Build failed. Initiating AWS cleanup to prevent resource conflicts...'
+            dir('terraform') {
+                sh 'terraform destroy -auto-approve'
+            }
         }
     }
 }
