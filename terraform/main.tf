@@ -348,9 +348,12 @@ resource "aws_iam_role_policy" "order_proc_policy" {
     Version = "2012-10-17"
     Statement = [
       { 
-        Action = ["sqs:ReceiveMessage", "sqs:DeleteMessage", "sqs:GetQueueAttributes"], 
-        Effect = "Allow", 
-        Resource = aws_sqs_queue.pending_orders_queue.arn 
+        Action   = ["sqs:ReceiveMessage", "sqs:DeleteMessage", "sqs:GetQueueAttributes", "sqs:SendMessage"], 
+        Effect   = "Allow", 
+        Resource = [
+          aws_sqs_queue.pending_orders_queue.arn,
+          aws_sqs_queue.global_lambda_dlq.arn
+        ] 
       },
       { 
         Action   = ["dynamodb:PutItem", "dynamodb:GetItem", "dynamodb:UpdateItem"], 
