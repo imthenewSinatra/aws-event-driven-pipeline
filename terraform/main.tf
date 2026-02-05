@@ -28,6 +28,7 @@ resource "aws_sqs_queue" "orders_queue" {
   name                        = "orders-fifo-queue-affonso.fifo"
   fifo_queue                  = true
   content_based_deduplication = true
+  visibility_timeout_seconds  = 60
 
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.orders_dlq.arn
