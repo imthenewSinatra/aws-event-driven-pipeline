@@ -10,18 +10,19 @@ def lambda_handler(event, context):
     
     for record in event['Records']:
         try:
-            # The event comes from EventBridge through SQS
-            order_event = json.loads(record['body'])
-            order_data = order_event['detail']
+            # O SQS entrega seu JSON como uma string dentro de 'body'
+            order_data = json.loads(record['body'])
             
-            print(f"Processing order: {order_data['orderId']}")
+            # REMOVIDO: order_data = order_event['detail'] 
+            # O dado agora é extraído diretamente
             
-            # Simulate final processing logic (Inventory, Shipping, etc.)
+            print(f"Processing order: {order_data.get('orderId', 'Unknown')}")
+            
+            # Adiciona o status e salva no DynamoDB
             order_data['status'] = 'PROCESSED'
-            
-            # Save to the main DynamoDB table
             table.put_item(Item=order_data)
-            print(f"Order {order_data['orderId']} saved successfully.")
+            
+            print(f"Order {order_data.get('orderId')} saved successfully.")
             
         except Exception as e:
             print(f"Error processing order: {str(e)}")
