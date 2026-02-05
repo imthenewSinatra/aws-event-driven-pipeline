@@ -408,7 +408,7 @@ data "archive_file" "order_proc_zip" {
 }
 
 resource "aws_lambda_event_source_mapping" "sqs_proc_trigger" {
-  event_source_arn = aws_sqs_queue.orders_fifo.arn
+  event_source_arn = aws_sqs_queue.orders_queue.arn
   function_name    = aws_lambda_function.order_processing_lambda.arn
   batch_size       = 1
 }
