@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        AWS_CREDENTIALS = credentials('aws-credentials-lab')
-        AWS_DEFAULT_REGION = 'us-east-1'
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -21,31 +16,23 @@ pipeline {
             }
         }
 
-        stage('Terraform Plan') {
-            steps {
-                dir('terraform') {
-                    sh 'terraform plan'
-                }
-            }
-        }
-
         stage('Terraform Destroy') {
             steps {
                 dir('terraform') {
-                    sh 'terraform destroy -auto-approve'
+                    // MUDADO PARA DESTROY
+                    sh 'terraform destroy -auto-approve' 
                 }
             }
         }
     }
 
- //   post {
- //       always {
- //           cleanWs()
- //       }
+    // O bloco post deve ficar FORA do stages, mas DENTRO do pipeline
+    post {
         failure {
-            echo 'Oops! Build failed. Initiating AWS cleanup to prevent resource conflicts...'
-            dir('terraform') {
-                sh 'terraform destroy -auto-approve'
-            }
+            echo 'Ocorreu um erro na destruição da infraestrutura!'
+        }
+        success {
+            echo 'Infraestrutura destruída com sucesso. Economia garantida!'
         }
     }
+}
