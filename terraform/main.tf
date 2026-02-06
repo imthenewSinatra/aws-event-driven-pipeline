@@ -76,6 +76,29 @@ resource "aws_iam_role_policy" "lambda_policy" {
   })
 }
 
+# Permissão para a Lambda escrever na tabela do DynamoDB
+resource "aws_iam_role_policy" "lambda_dynamo_write" {
+  name = "lambda_dynamo_write_policy"
+  role = aws_iam_role.order_proc_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "dynamodb:PutItem",
+          "dynamodb:GetItem",
+          "dynamodb:UpdateItem",
+          "dynamodb:DescribeTable"
+        ]
+        Effect   = "Allow"
+        # ARN da sua tabela
+        Resource = "arn:aws:dynamodb:us-east-1:*:table/orders-db-affonso"
+      }
+    ]
+  })
+}
+
 # --- LAMBDA FUNCTION ---
 
 # Zip the Python code automatically before deployment
