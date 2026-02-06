@@ -38,10 +38,10 @@ pipeline {
         }
     }
 
-    post {
+ //   post {
  //       always {
  //           cleanWs()
-        }
+ //       }
         failure {
             echo 'Oops! Build failed. Initiating AWS cleanup to prevent resource conflicts...'
             dir('terraform') {
