@@ -1,0 +1,16 @@
+*.tfstate*
+
+# Terraform local folders and variables
+.terraform/
+*.tfvars
+*.tfplan
+
+# Python local files
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# IDE and OS files
+.vscode/
+.DS_Store

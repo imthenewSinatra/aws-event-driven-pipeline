@@ -1,5 +1,6 @@
-// creating the bucket for state persistence
+// creating the bucket for state persistence using CLI
 // aws s3api create-bucket --bucket terraform-state-affonso-unique-id --region us-east-1
+// enable versioning
 // aws s3api put-bucket-versioning --bucket terraform-state-affonso-unique-id --versioning-configuration Status=Enabled
 
 terraform {
@@ -76,7 +77,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
   })
 }
 
-# Permissão para a Lambda escrever na tabela do DynamoDB
+# Permission for Lambda to write to the DynamoDB table
 resource "aws_iam_role_policy" "lambda_dynamo_write" {
   name = "lambda_dynamo_write_policy"
   role = aws_iam_role.order_proc_role.id
@@ -201,7 +202,7 @@ resource "aws_sns_topic" "error_notifications" {
 resource "aws_sns_topic_subscription" "error_email" {
   topic_arn = aws_sns_topic.error_notifications.arn
   protocol  = "email"
-  endpoint  = "seu-email@exemplo.com" # Change this!
+  endpoint  = var.alert_email
 }
 
 # DynamoDB Table for File Tracking

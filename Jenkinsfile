@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        TF_VAR_alert_email = credentials('SNS_ALERT_EMAIL')
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -16,17 +20,37 @@ pipeline {
             }
         }
 
-        stage('Terraform Destroy') {
+        stage('Terraform Plan') {
             steps {
                 dir('terraform') {
-                    // MUDADO PARA DESTROY
-                    sh 'terraform destroy -auto-approve' 
+                    sh 'terraform plan -out=tfplan'
                 }
             }
         }
-    }
 
-    // O bloco post deve ficar FORA do stages, mas DENTRO do pipeline
+        // NOTE: In a production environment, the 'apply' stage should use the plan 
+        // artifact generated in the previous step (e.g., 'terraform apply -auto-approve tfplan').
+        // This ensures that exactly what was planned and reviewed is what gets 
+        // executed, preventing any drift or unexpected changes between stages.
+
+        stage('Terraform Apply') {
+            steps {
+                dir('terraform') {
+                    sh 'terraform apply -auto-approve' 
+                }
+            }
+        }
+
+        // Destroy command
+        // stage('Terraform Destroy') {
+        //     steps {
+        //         dir('terraform') {
+        //             sh 'terraform destroy -auto-approve' 
+        //         }
+        //     }
+        // }
+    
+
     post {
         failure {
             echo 'Ocorreu um erro na destruição da infraestrutura!'
@@ -34,5 +58,6 @@ pipeline {
         success {
             echo 'Infraestrutura destruída com sucesso. Economia garantida!'
         }
+    }
     }
 }

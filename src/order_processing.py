@@ -10,12 +10,12 @@ def lambda_handler(event, context):
     
     for record in event['Records']:
         try:
-            # O SQS entrega seu JSON como uma string dentro de 'body'
+            # SQS delivers your JSON as a string within 'body'
             order_data = json.loads(record['body'])
             
             print(f"Processing order: {order_data.get('orderId', 'Unknown')}")
             
-            # Adiciona o status e salva no DynamoDB
+            # Add the status and save it to DynamoDB
             order_data['status'] = 'PROCESSED'
             table.put_item(Item=order_data)
             
