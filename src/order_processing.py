@@ -13,9 +13,6 @@ def lambda_handler(event, context):
             # O SQS entrega seu JSON como uma string dentro de 'body'
             order_data = json.loads(record['body'])
             
-            # REMOVIDO: order_data = order_event['detail'] 
-            # O dado agora é extraído diretamente
-            
             print(f"Processing order: {order_data.get('orderId', 'Unknown')}")
             
             # Adiciona o status e salva no DynamoDB

@@ -80,7 +80,6 @@ resource "aws_iam_role_policy" "lambda_policy" {
 resource "aws_iam_role_policy" "lambda_dynamo_write" {
   name = "lambda_dynamo_write_policy"
   role = aws_iam_role.order_proc_role.id
-
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -88,12 +87,10 @@ resource "aws_iam_role_policy" "lambda_dynamo_write" {
         Action = [
           "dynamodb:PutItem",
           "dynamodb:GetItem",
-          "dynamodb:UpdateItem",
-          "dynamodb:DescribeTable"
+          "dynamodb:UpdateItem"
         ]
         Effect   = "Allow"
-        # ARN da sua tabela
-        Resource = "arn:aws:dynamodb:us-east-1:*:table/orders-db-affonso"
+        Resource = "arn:aws:dynamodb:us-east-1:*:table/orders-db-affonso" #
       }
     ]
   })
