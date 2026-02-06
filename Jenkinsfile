@@ -51,12 +51,20 @@ pipeline {
         // }
     
     }
+    // post {
+    //     failure {
+    //         echo 'An error occurred during the destruction of the infrastructure!'
+    //     }
+    //     success {
+    //         echo 'Infrastructure successfully destroyed. Savings guaranteed!'
+    //     }
+    // }
     post {
         failure {
-            echo 'Ocorreu um erro na destruição da infraestrutura!'
+            echo 'An error occurred during the infrastructure destruction!'
         }
         success {
-            echo 'Infraestrutura destruída com sucesso. Economia garantida!'
+            echo 'Infrastructure successfully destroyed. Savings guaranteed!'
         }
     }
-    }
+}
