@@ -33,38 +33,38 @@ pipeline {
         // This ensures that exactly what was planned and reviewed is what gets 
         // executed, preventing any drift or unexpected changes between stages.
 
-        // stage('Terraform Apply') {
-        //     steps {
-        //         dir('terraform') {
-        //             sh 'terraform apply -auto-approve' 
-        //         }
-        //     }
-        // }
-
-        // Destroy command
-        stage('Terraform Destroy') {
+        stage('Terraform Apply') {
             steps {
                 dir('terraform') {
-                    sh 'terraform destroy -auto-approve' 
+                    sh 'terraform apply -auto-approve' 
                 }
             }
         }
+
+        // Destroy command
+        // stage('Terraform Destroy') {
+        //     steps {
+        //         dir('terraform') {
+        //             sh 'terraform destroy -auto-approve' 
+        //         }
+        //     }
+        // }
     
-    }
-    post {
-        failure {
-            echo 'An error occurred during the destruction of the infrastructure!'
-        }
-        success {
-            echo 'Infrastructure successfully destroyed. Savings guaranteed!'
-        }
     }
     // post {
     //     failure {
-    //         echo 'An error occurred during the infrastructure destruction!'
+    //         echo 'An error occurred during the destruction of the infrastructure!'
     //     }
     //     success {
     //         echo 'Infrastructure successfully destroyed. Savings guaranteed!'
     //     }
     // }
+    post {
+        failure {
+            echo 'An error occurred during the infrastructure destruction!'
+        }
+        success {
+            echo 'Infrastructure successfully destroyed. Savings guaranteed!'
+        }
+    }
 }
