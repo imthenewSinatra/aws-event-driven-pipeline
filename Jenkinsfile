@@ -50,7 +50,7 @@ pipeline {
         //     }
         // }
     
-
+    }
     post {
         failure {
             echo 'Ocorreu um erro na destruição da infraestrutura!'
