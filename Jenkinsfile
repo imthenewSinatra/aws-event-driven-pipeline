@@ -29,19 +29,19 @@ pipeline {
             }
         }
 
-        stage('Terraform Apply') {
+        stage('Terraform Destroy') {
             steps {
                 dir('terraform') {
-                    sh 'terraform apply -auto-approve'
+                    sh 'terraform destroy -auto-approve'
                 }
             }
         }
     }
 
     post {
-//        always {
-//            cleanWs()
-//        }
+ //       always {
+ //           cleanWs()
+        }
         failure {
             echo 'Oops! Build failed. Initiating AWS cleanup to prevent resource conflicts...'
             dir('terraform') {
