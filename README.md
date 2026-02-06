@@ -58,8 +58,6 @@ Final validation was performed by auditing the DynamoDB table, which confirmed t
 **Developed by [Affonso Souza](https://github.com/imthenewSinatra)** *Cloud & DevOps Enthusiast | Data Science Student*
 ---
 
-## 👨‍💻 Desenvolvido por
-
 **Affonso Souza** *Cloud & DevOps Enthusiast*
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/affonsosouza)
