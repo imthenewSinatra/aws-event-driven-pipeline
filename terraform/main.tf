@@ -432,6 +432,7 @@ resource "aws_lambda_function" "order_processing_lambda" {
   runtime       = "python3.12"
   timeout       = 60
 
+  source_code_hash = data.archive_file.order_proc_zip.output_base64sha256
   environment {
     variables = {
       DYNAMODB_TABLE = aws_dynamodb_table.main_orders_db.name
