@@ -1,55 +1,58 @@
-🚀 AWS Event-Driven Pipeline: Order Processing with CI/CD
-This project implements a Serverless Event-Driven Architecture on AWS for asynchronous order processing. It leverages Infrastructure as Code (IaC) with Terraform and a robust CI/CD pipeline via Jenkins to automate the entire lifecycle, from deployment to cleanup.
+# AWS Event-Driven Pipeline: Order Processing System
 
-🏗️ System Architecture
-The solution is designed to ensure data integrity and automatic scalability:
+## 🚀 Project Status: Success & Archived
+> **Note**: This project has achieved its primary objectives and is now in an archived state. All core functionalities, including CI/CD automation, event-driven messaging, and NoSQL persistence, have been successfully validated and documented.
 
-AWS API Gateway (REST): Acts as the entry point for incoming order requests.
+---
 
-Amazon SQS FIFO Queue: Ensures that orders are processed in the exact order they arrive and prevents message duplication.
+## 📌 Overview
+This project implements a highly scalable, event-driven architecture on AWS to process customer orders. It demonstrates a full-cycle DevOps approach, utilizing **Infrastructure as Code (Terraform)** and **CI/CD (Jenkins)** to deploy a serverless environment.
 
-AWS Lambda (Python 3.12): A serverless compute function that validates and processes order data.
+### 🏗️ Architecture
+The system follows a modern decoupled pattern:
+1. **API Gateway**: Entry point for REST requests.
+2. **Amazon SQS (FIFO)**: Buffers messages to ensure reliability and order.
+3. **AWS Lambda**: Processes messages using Python 3.12 logic.
+4. **Amazon DynamoDB**: Stores processed order data with a "PROCESSED" status.
+5. **Observability**: DLQ (Dead Letter Queue) for failed messages and SNS for email notifications.
 
-Amazon DynamoDB: A NoSQL database where processed orders are persisted with a PROCESSED status.
+![Architecture Diagram](./img/architecture.png)
 
-SQS DLQ (Dead Letter Queue): An isolation queue for messages that fail processing, allowing for later analysis and system resilience.
+---
 
-🛠️ Engineering Highlights
-This project goes beyond basic functionality, implementing advanced engineering principles:
+## 🛠️ Tech Stack
+* **Cloud**: Amazon Web Services (AWS)
+* **IaC**: Terraform
+* **CI/CD**: Jenkins (Hosted on EC2)
+* **Language**: Python (Boto3)
+* **Scripting**: PowerShell for stress testing
 
-Continuous Deployment Synchronization: Utilizes source_code_hash in Terraform to ensure that any change in the Python script triggers an automatic Lambda update.
+---
 
-Security & IAM Roles: Implements the principle of least privilege. The Jenkins server uses an IAM Role attached to the EC2 instance, eliminating the need for hardcoded credentials (AWS Access Keys) in the codebase.
+## 📈 Evidence of Success
 
-FinOps & Cost Optimization: The Jenkins pipeline includes automated Terraform Destroy stages, enabling a full teardown of the infrastructure after testing to minimize AWS costs.
+### 1. CI/CD Automation
+The infrastructure was managed through a Jenkins pipeline, achieving high stability over 25 successful builds, ensuring consistent deployments and security-by-design (Secret Management).
 
-State Management: Uses an S3 Backend for Terraform state storage, ensuring secure collaboration and state persistence.
+![Jenkins Pipeline](./img/jenkins_pipeline.png)
 
-🔍 Case Study: Troubleshooting & Debugging
-A key highlight of this project was resolving a critical integration error identified through CloudWatch Logs:
+### 2. Integration & Stress Testing
+A PowerShell script was used to simulate real-world traffic, sending batch orders to the API Gateway. The system successfully handled concurrent requests and mapped them to SQS message IDs.
 
-Problem: KeyError: 'detail' at line 15 of the Lambda processor.
+![Terminal Success](./img/terminal_success.png)
 
-Diagnosis: The code was expecting an EventBridge event schema, but the actual trigger was SQS, which encapsulates the payload within record['body'].
+### 3. Data Persistence
+Final validation was performed by auditing the DynamoDB table, which confirmed that all sent orders were correctly parsed, processed, and stored with their respective attributes.
 
-Resolution: Refactored the data parsing to extract the JSON directly from the SQS body. This was successfully validated with a stress test of 10 simultaneous orders.
+![DynamoDB Results](./img/dynamodb_results.png)
 
-📦 Getting Started
-Prerequisites: Terraform, AWS CLI, and Jenkins running on an EC2 instance.
+---
 
-Deployment:
+## 🔒 Security Best Practices Implemented
+* **Secret Management**: Passwords and sensitive data were handled via Jenkins Credentials and Terraform Variables, never exposed in plain text.
+* **Environment Isolation**: Used Python Virtual Environments (`.venv`) and `.gitignore` to maintain a clean and secure repository.
+* **IAM Least Privilege**: Lambda functions were configured with specific roles for CloudWatch, SQS, and DynamoDB.
 
-Push changes to the repository.
+---
 
-Jenkins automatically triggers the declarative pipeline (init, plan, apply).
-
-Testing: Send a POST request to the API Gateway endpoint and verify the persistence in the DynamoDB table.
-
-👤 About the Author
-Affonso Souza Senior IT Infrastructure Specialist with over 10 years of experience, currently specializing in Cloud, DevOps, and Data Science.
-
-AWS Certified: Solutions Architect Associate, Developer Associate, and Cloud Practitioner.
-
-Core Skills: Python, SQL, Terraform, Jenkins, and Cloud Architecture.
-
-Philosophy: Building antifragile and automated environments.
+**Developed by [Affonso Souza](https://github.com/imthenewSinatra)** *Cloud & DevOps Enthusiast | Data Science Student*
